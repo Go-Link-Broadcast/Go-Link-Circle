@@ -1,0 +1,600 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #100014;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+main {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+#site-title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #ffffff;
+}
+.tooltip-container {
+  margin-top: 10px;
+}
+.copy-container {
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  display: inline-block;
+}
+.copy-container:hover {
+  color: rgb(244, 244, 248);
+}
+.copy-btn {
+  background: #666;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background: #0314ff;
+}
+.tooltip {
+  font-size: 14px;
+  color: #ffffff;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-content {
+  background-color: #050505;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 300px;
+  border-radius: 8px;
+}
+.settings-option {
+  margin-bottom: 15px;
+}
+.settings-option button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.settings-option button:hover {
+  background-color: #45a049;
+}
+#close-settings {
+  background-color: #f44336;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#close-settings:hover {
+  background-color: #d32f2f;
+}
+#join-wrapper {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+#username {
+  padding: 12px 16px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  margin-bottom: 1rem;
+  width: 300px;
+}
+.volume-icon {
+  height: 18px;
+  width: 18px;
+  opacity: 0.8;
+}
+
+
+#join-btn {
+  background-color: #2d8cff;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+#join-btn:hover {
+  background-color: #2478db;
+  transform: translateY(-1px);
+}
+
+#user-streams {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  height: calc(100vh - 80px);
+  transition: all 0.3s ease;
+}
+
+@media screen and (max-width: 768px) {
+  #user-streams {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+.user-settings {
+  position: relative;
+}
+
+.settings-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.settings-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: #2c2c2c;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 4;
+}
+
+.settings-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  text-align: left;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.settings-menu button:hover {
+  background-color: #444;
+}
+
+/*DARK MODE CSS*/
+body.dark-mode {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+body.dark-mode #settings-modal .modal-content {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+body.dark-mode .video-containers {
+  background-color: #000000;
+  border: 1px solid #adadad;
+}
+
+
+/* Slider (Toggle Switch) Styles */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #05ffb4; /* Blue color when toggled on */
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Dark mode support */
+body.dark-mode .slider {
+  background-color: #666;
+}
+
+body.dark-mode input:checked + .slider {
+  background-color: #1cf808; /* Lighter blue for dark mode */
+}
+/*#user-streams {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  height: calc(100vh - 80px);
+  transition: all 0.3s ease;
+}*/
+.video-containers {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #050505;
+  transition: all 0.3s ease;
+  
+  background-image: url('./assets/User_Avatar1.png');
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: auto;
+}
+
+.video-containers.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1000;
+}
+.video-containers.minimized {
+  position: fixed;
+  right: 1rem;
+  bottom: 100px;
+  width: 200px !important;
+  height: 120px !important;
+  z-index: 1001;
+}
+.video-player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.video-settings {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+}
+
+.settings-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.settings-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #2c2c2c;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 4;
+}
+
+.settings-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  text-align: left;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.settings-menu button:hover {
+  background-color: #444;
+}
+
+.user-uid {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+#footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: none; /* Hide the footer by default */
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  opacity: 1; /* Keep opacity at 1 for when it's shown */
+}
+.control-icon {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+.control-icon:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.control-icon img {
+  width: 24px;
+  height: 24px;
+}
+.icon-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 12px;
+}
+.icon-wrapper p {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #ffffff;
+}
+#leave-btn {
+  background-color: #e74c3c;
+  padding: 8px 16px;
+}
+#leave-btn:hover {
+  background-color: #eef106;
+}
+/* chat */
+#chat-wrapper {
+  position: relative;
+}
+#chat-popup {
+  position: fixed;
+  bottom: 110px;
+  right: 10px;
+  width: 600px;
+  height: 500px;
+  background-color: white;
+  border: 1px solid #444;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+}
+#chat-messages {
+  max-height: 320px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+  color: black;
+}
+#chat-input {
+  width: 49%;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  margin-right: 5px;
+}
+#send-message-btn {
+  background-color: white;
+  border: none;
+  color: black;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#send-message-btn:hover {
+  background-color: yellow;
+}
+#chat-count {
+  color: aliceblue;
+}
+/* Updated emoji picker styles */
+.emoji-picker {
+  position: fixed;
+  bottom: 150px;
+  right: 20px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  z-index: 1001;
+  display: none;
+}
+.emoji-picker.active {
+  display: block;
+}
+.emoji-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 5px;
+}
+.emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.emoji-grid span {
+  cursor: pointer;
+  padding: 5px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+.emoji-grid span:hover {
+  transform: scale(1.2);
+}
+.control-icon {
+  background: orange;
+  border-radius: 50%;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.control-icon:hover {
+  background: rgba(4, 238, 238, 0.2);
+  transform: translateY(-2px);
+}
+
+
+@media screen and (max-width: 768px) {
+  #join-wrapper {
+      width: 90%;
+      padding: 1.5rem;
+  }
+  
+  #username {
+      width: 100%;
+  }
+  
+  #user-streams {
+      grid-template-columns: 1fr;
+  }
+}
+@media screen and (max-width:1400px) {
+  main {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      width: 96%;
+  }
+}
+/* Add new styles for recording and streaming */
+.live-rec {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(255, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 1000;
+  animation: pulse 1.5s infinite;
+}
+.live-rec::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+
+.stream-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 15px 0;
+}
+.stream-form input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.stream-form label {
+  color: white;
+  font-size: 14px;
+}
+
+/*Logo On Video Lower Right-Hand Corner*/
+.video-logo {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 70px;
+  height: 60px;
+  z-index: 3;
+}
+
+.video-logo img {
+  width: 100%;
+  height: 100%;
+  border-radius: 70%;
+  border: 0px solid #0000002f;
+}
+/*screen sharing*/
+#small-video-preview {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 200px; /* Adjust size as needed */
+  height: auto;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 1000;
+  background: #000;
+}
+
+#small-video-preview video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Placeholder Sound Bar Effect*/
+.speaking {
+  box-shadow: 0 0 15px rgba(0, 255, 157, 0.7);
+  /*transition: box-shadow 0.3s ease;*/
+}
+
+.placeholder-container.speaking {
+  box-shadow: 0 0 15px rgba(153, 0, 255, 0.7);
+  transition: box-shadow 0.3s ease;
+}

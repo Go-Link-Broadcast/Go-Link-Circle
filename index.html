@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Go-Link Video Conferencing</title>
+    <meta name="description" content="Go-Link Video Conferencing" />
+    <meta name="author" content="Go-Link" />
+    <link id="favicon" rel="icon" type="image/png" href="./assets/Go-Link-logo2.png" />
+    <meta property="og:image" content="/og-image.png" />
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300&family=Permanent+Marker&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.4/dist/ffmpeg.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- jwt-decode -->
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    
+</head>
+<body>
+    <main>
+        <div id="join-wrapper">
+            <div id="header">
+                <img id="logo" src="./assets/Go-Link-logo2.png" height="210px" alt="Go-Link Logo" />
+                <h1 id="site-title">Go-Link Video Conferencing</h1>
+                <div class="tooltip-container">
+                    <div class="copy-container" onclick="copyToClipboard('http://127.0.0.1:5501/go-link-video-conference/index.html')">
+                        <span class="tooltip">https://go-link-video-conference/general-meeting 🔗</span>
+                    </div>
+                </div>
+                <br>
+                <br>
+            </div>
+            <input id="username" type="text" placeholder="Enter your name..." />
+            <button id="join-btn">Join Stream</button>
+        </div>
+
+        <!-- Video Streams -->
+        <div id="user-streams"></div>
+        
+        <!-- Wrapper for join button / Footer Controls -->
+        <div id="footer">
+            <div class="icon-wrapper">
+                <button class="control-icon" id="camera-btn">
+                    <img src="./assets/video.svg" alt="Camera" />
+                </button>
+                <p>Cam</p>
+            </div>
+
+            <div class="icon-wrapper">
+                <div class="chat-icon-container" style="position: relative;">
+                    <button class="control-icon"  id="chat-btn">
+                    <img  src="./assets/chat-svgrepo-com.svg" alt="Chat"/>
+                    <!--<span id="message-count" style="display: none; position: absolute; top: -8px; right: -8px;">0</span>-->
+                    </div>
+                </button>
+                <p>Chat</p>
+            </div>
+
+            <div class="icon-wrapper">
+                <button class="control-icon" id="mic-btn">
+                    <img src="./assets/microphone.svg" alt="Microphone" />
+                </button>
+                <p>Mic</p>
+            </div>
+
+            <div class="icon-wrapper">
+                <button class="control-icon" id="screen-share-btn">
+                    <img src="./assets/share-screen-svgrepo-com.svg" alt="Screen Share" />
+                </button>
+                <p>Share</p>
+            </div>
+
+            <div class="icon-wrapper">
+                <button class="control-icon" id="record-btn">
+                    <img src="./assets/recording-filled-svgrepo-com.svg" alt="Record" />
+                </button>
+                <p>Record</p>
+            </div>
+
+            <div class="icon-wrapper">
+                <button class="control-icon" id="settings-btn">
+                    <img src="./assets/settings.svg" alt="Settings" />
+                </button>
+                <p>Settings</p>
+                
+            </div>
+
+            <div class="icon-wrapper">
+                <button class="control-icon" id="leave-btn">
+                    <img src="./assets/logout-svgrepo-com.svg" alt="Leave" />
+                </button>
+                <p>Leave</p>
+            </div>
+        </div>
+        
+    </main>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert(`Copied: ${text}`);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <h2>Settings</h2>
+            <div class="settings-option">
+                <label for="dark-mode">Dark Mode:</label>
+                <label class="switch">
+                    <input type="checkbox" id="dark-mode">
+                    <span class="slider"></span>
+                  </label>
+              </div>
+
+              <div class="settings-option">
+                <label for="auto-camera-off">Auto-Camera Off on Join:</label>
+                <label class="switch">
+                    <input type="checkbox" id="auto-camera-off">
+                    <span class="slider"></span>
+                  </label>
+              </div>
+
+            <div class="settings-option">
+                <label for="video-tiles-toggle">Show Video Tiles:</label>
+                <label class="switch">
+                    <input type="checkbox" id="video-tiles-toggle">
+                    <span class="slider"></span>
+                  </label>
+            </div>
+            
+              <div class="settings-option">
+                <label for="noise-suppression">Noise Suppression:</label>
+                <label class="switch">
+                    <input type="checkbox" id="noise-suppression">
+                    <span class="slider"></span>
+                  </label>
+              </div>
+
+              <div class="settings-option">
+                <label for="video-quality">Video Quality:</label>
+                <select id="video-quality">
+                  <option value="low">Low</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+
+              <div class="settings-option">
+                <label for="background-mode">Background Mode:</label>
+                <select id="background-mode">
+                  <option value="none">None</option>
+                  <option value="blur">Blur</option>
+                  <option value="virtual">Virtual Background</option>
+                </select>
+              </div>
+              
+            <button id="close-settings">Close</button>
+        </div>
+    </div>
+      </div>
+      
+    <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
+    <script src='script.js'></script>
+</body>
+</html>
+
