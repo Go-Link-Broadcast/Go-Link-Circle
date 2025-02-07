@@ -4,7 +4,7 @@ let client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 //#2
 let config = {
   appid: "f6af49d5a9d6465797fca7e81505b546", //needed
-  token: "007eJxTYFh/v3Tn/qWzp1aoepWK7utK/PHC+XppzH0XBXXJja+7XN4oMKSZJaaZWKaYJlqmmJmYmZpbmqclJ5qnWhiaGpgmmZqYyR5fkt4QyMjAaavGxMgAgWA+g3u+T2ZedpizIQMDAFvxIRg=", //needed
+  token: "007eJxTYHDSty1bo+KkPP/fdObbzOWG+yum+FecrBLx0Vv9dopNaK8CQ5pZYpqJZYppomWKmYmZqbmleVpyonmqhaGpgWmSqYnZVPFl6Q2BjAx71x1kYIRCEJ+TwT3fJzMvO8zZkIEBAE6fH1U=", //needed
   uid: null,
   channel: "GoLinkVC1", //needed
 };
