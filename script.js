@@ -1055,10 +1055,10 @@ document.getElementById("record-btn").addEventListener("click", async () => {
     startFaviconAnimation();
 
     try {
-      // Automatically capture the entire window without prompting
+      // Automatically capture the entire screen without prompting
       const displayStream = await navigator.mediaDevices.getDisplayMedia({
         video: {
-          displaySurface: "window", // Capture the entire window
+          displaySurface: "monitor", // Capture the entire screen
           cursor: "always", // Include the cursor
         },
         audio: true, // Request system audio
