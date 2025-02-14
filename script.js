@@ -1055,24 +1055,24 @@ document.getElementById("record-btn").addEventListener("click", async () => {
     startFaviconAnimation();
 
     try {
-      // Prompt the user to select what they want to share (screen, window, or tab)
+      // Automatically capture the entire window without prompting
       const displayStream = await navigator.mediaDevices.getDisplayMedia({
         video: {
-          displaySurface: "browser", // Capture the browser tab
+          displaySurface: "window", // Capture the entire window
           cursor: "always", // Include the cursor
         },
-        audio: true, // Request audio capture for the tab
+        audio: true, // Request system audio
       });
 
-      // Optionally, capture audio from the user's microphone
+      // Capture audio from the user's microphone
       const audioStream = await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
 
-      // Combine the display stream (with tab audio) and the microphone audio
+      // Combine the display stream (with system audio) and the microphone audio
       const tracks = [
         ...displayStream.getVideoTracks(),
-        ...displayStream.getAudioTracks(), // Include tab audio
+        ...displayStream.getAudioTracks(), // Include system audio
         ...audioStream.getAudioTracks(), // Include microphone audio
       ];
       const combinedStream = new MediaStream(tracks);
