@@ -468,6 +468,43 @@ client.on("volume-indicator", function (evt) {
     }
   }
 });
+// Mobile Controls Show/Hide
+let controlsVisible = true;
+document.addEventListener('click', () => {
+  controlsVisible = !controlsVisible;
+  document.getElementById('footer').style.display = controlsVisible ? 'flex' : 'none';
+});
+
+// Swipe Gestures for Pinned Videos
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+document.addEventListener('touchend', (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+});
+
+function handleSwipe() {
+  if (touchEndX < touchStartX) {
+    // Swipe left
+    const pinnedVideo = document.querySelector('.video-containers.pinned');
+    if (pinnedVideo) {
+      pinVideo(pinnedVideo.id.replace('video-wrapper-', ''));
+    }
+  }
+  if (touchEndX > touchStartX) {
+    // Swipe right
+    const pinnedVideo = document.querySelector('.video-containers.pinned');
+    if (pinnedVideo) {
+      pinVideo(pinnedVideo.id.replace('video-wrapper-', ''));
+    }
+  }
+}
+
 //Camera Button Action
 document.getElementById("camera-btn").addEventListener("click", async () => {
   if (!localTrackState.videoTrackMuted) {
@@ -553,7 +590,19 @@ const addUsersList = () => {
     }
     showSettingsMenu(uid);
   }
-  
+
+  // Pin Video Function
+function pinVideo(uid) {
+  const videoContainer = document.getElementById(`video-wrapper-${uid}`);
+  if (videoContainer) {
+    videoContainer.classList.toggle('pinned');
+    document.querySelectorAll('.video-containers').forEach(container => {
+      if (container !== videoContainer) {
+        container.classList.toggle('sidebar');
+      }
+    });
+  }
+}
   function pinVideo(uid) {
     const videoContainer = document.getElementById(`video-wrapper-${uid}`);
     if (videoContainer) {
