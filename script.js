@@ -448,26 +448,42 @@ document.getElementById("mic-btn").addEventListener("click", async () => {
 });
 // Add audio activity detection
 client.on("volume-indicator", function (evt) {
-  for (let i = 0; evt.length > i; i++) {
-    let speaker = evt[i].uid;
-    let volume = evt[i].level;
-    const videoContainer = document.getElementById(`video-wrapper-${speaker}`);
-
-    if (volume > 0) {
-      document.getElementById(`volume-${speaker}`).src =
-        "./assets/volume-on.svg";
-      if (videoContainer) {
-        videoContainer.classList.add("audio-active");
-      }
-    } else {
-      document.getElementById(`volume-${speaker}`).src =
-        "./assets/volume-off.svg";
-      if (videoContainer) {
-        videoContainer.classList.remove("audio-active");
+  evt.forEach(({ uid, level }) => {
+    const videoContainer = document.getElementById(`video-wrapper-${uid}`);
+    if (videoContainer) {
+      if (level > 0) {
+        videoContainer.classList.add('active-speaker');
+      } else {
+        videoContainer.classList.remove('active-speaker');
       }
     }
-  }
+  });
 });
+// Pin Video Function
+function pinVideo(uid) {
+  const videoContainer = document.getElementById(`video-wrapper-${uid}`);
+  if (videoContainer) {
+    videoContainer.classList.toggle('pinned');
+
+    if (videoContainer.classList.contains('pinned')) {
+      document.getElementById('user-streams').prepend(videoContainer);
+    } else {
+      document.getElementById('user-streams').appendChild(videoContainer);
+    }
+
+    const allContainers = document.querySelectorAll('.video-containers');
+    allContainers.forEach(container => {
+      if (container !== videoContainer) {
+        if (videoContainer.classList.contains('pinned')) {
+          container.style.height = '150px';
+        } else {
+          container.style.height = 'auto';
+        }
+      }
+    });
+  }
+}
+
 // Mobile Controls Show/Hide
 let controlsVisible = true;
 document.addEventListener('click', () => {
@@ -567,8 +583,8 @@ const addUsersList = () => {
           <div class="user-settings">
             <button class="settings-btn" onclick="showSettingsMenu('${uid}')">⋮</button>
             <div class="settings-menu" id="settings-menu-${uid}">
-              <button onclick="dontWatch('${uid}')">Don’t Watch</button>
-              <button onclick="pinVideo('${uid}')">Pin</button>
+              <button onclick="dontWatch('${uid}')">Watch / Don’t Watch</button>
+              <button onclick="pinVideo('${uid}')">Pin / UnPin</button>
               <button onclick="fullScreenVideo('${uid}')">Full Screen</button>
               <button onclick="cancelSettings('${uid}')">Cancel</button>
             </div>
@@ -590,19 +606,7 @@ const addUsersList = () => {
     }
     showSettingsMenu(uid);
   }
-
-  // Pin Video Function
-function pinVideo(uid) {
-  const videoContainer = document.getElementById(`video-wrapper-${uid}`);
-  if (videoContainer) {
-    videoContainer.classList.toggle('pinned');
-    document.querySelectorAll('.video-containers').forEach(container => {
-      if (container !== videoContainer) {
-        container.classList.toggle('sidebar');
-      }
-    });
-  }
-}
+  
   function pinVideo(uid) {
     const videoContainer = document.getElementById(`video-wrapper-${uid}`);
     if (videoContainer) {
@@ -610,6 +614,7 @@ function pinVideo(uid) {
     }
     showSettingsMenu(uid);
   }
+
   
   function fullScreenVideo(uid) {
     const videoContainer = document.getElementById(`video-wrapper-${uid}`);
@@ -630,18 +635,6 @@ function pinVideo(uid) {
       });
     }
   });
- /* const updateUsersList = () => {
-    const users = [config.uid, ...Object.keys(remoteTracks)];
-    usersSidebar.innerHTML = `
-      <h3 style="margin-bottom: 20px; font-size: 1.5em;">Participants (${users.length})</h3>
-      ${users.map(uid => `
-        <div class="user-item" style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 5px;">
-          <span>${uid}</span>
-          
-        </div>
-      `).join('')}
-    `;
-  };*/
 
   client.on("user-joined", (user) => {
     remoteTracks[user.uid] = user;
@@ -781,12 +774,6 @@ function showSettingsMenu(uid) {
 function dontWatch(uid) {
   const videoContainer = document.getElementById(`video-wrapper-${uid}`);
   videoContainer.style.display = 'none';
-  showSettingsMenu(uid);
-}
-
-function pinVideo(uid) {
-  const videoContainer = document.getElementById(`video-wrapper-${uid}`);
-  document.getElementById('user-streams').prepend(videoContainer);
   showSettingsMenu(uid);
 }
 
