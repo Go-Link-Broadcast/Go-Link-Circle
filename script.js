@@ -485,11 +485,12 @@ function pinVideo(uid) {
 }
 
 // Mobile Controls Show/Hide
+/*
 let controlsVisible = true;
 document.addEventListener('click', () => {
   controlsVisible = !controlsVisible;
   document.getElementById('footer').style.display = controlsVisible ? 'flex' : 'none';
-});
+});*/
 
 // Swipe Gestures for Pinned Videos
 let touchStartX = 0;
