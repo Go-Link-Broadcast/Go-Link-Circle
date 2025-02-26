@@ -572,7 +572,18 @@ const addUsersList = () => {
     isSidebarOpen = !isSidebarOpen;
     usersSidebar.style.right = isSidebarOpen ? "0" : "-300px";
   });
-
+// Close sidebar when clicking outside
+document.addEventListener('click', (event) => {
+  const sidebar = document.getElementById('users-sidebar');
+  const usersBtn = document.getElementById('users-list-btn');
+  
+  if (isSidebarOpen && 
+      !sidebar.contains(event.target) && 
+      !usersBtn.contains(event.target)) {
+    isSidebarOpen = false;
+    sidebar.style.right = "-300px";
+  }
+});
   const updateUsersList = () => {
     const users = [config.uid, ...Object.keys(remoteTracks)];
     usersSidebar.innerHTML = `
